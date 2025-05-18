@@ -23,9 +23,20 @@ CustomerId = NewType("CustomerId", uuid.UUID)
 class Customer(ABC):
     store: Store
     id: CustomerId = field(default_factory=lambda: CustomerId(uuid.UUID(fake.uuid4())))
-    name: str = field(default_factory=fake.name)
+    title: str = field(default_factory=fake.prefix)
+    first_name: str = field(default_factory=fake.first_name)
+    last_name: str = field(default_factory=fake.last_name)
+    email: str = field(init=False)
+    phone_number: str = field(default_factory=fake.phone_number)
+    address: str = field(default_factory=fake.address)
     favorite_number: int = field(default_factory=lambda: fake.random.randint(1, 100))
     fan_level: int = field(default_factory=lambda: fake.random.randint(1, 5))
+
+    def __post_init__(self):
+        email = (
+            f"{self.first_name.lower()}.{self.last_name.lower()}@{fake.domain_name()}"
+        )
+        object.__setattr__(self, "email", email)
 
     def p_buy_season(self, day: Day):
         return self.store.p_buy(day)
@@ -93,7 +104,12 @@ class Customer(ABC):
     def to_dict(self) -> dict[str, Any]:
         return {
             "id": str(self.id),
-            "name": str(self.name),
+            "title": self.title,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "address": self.address,
         }
 
 
