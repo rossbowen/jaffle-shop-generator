@@ -42,7 +42,7 @@ class Order:
         self.total = self.subtotal + self.tax_paid
 
     def __str__(self):
-        return f"{self.customer.name} bought {str(self.order_items)} at {self.day}"
+        return f"{self.customer.first_name} {self.customer.last_name} bought {str(self.order_items)} at {self.day}"
 
     def to_dict(self) -> dict[str, Any]:
         return {
