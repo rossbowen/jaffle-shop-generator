@@ -1,7 +1,7 @@
 import datetime as dt
 import uuid
 from dataclasses import dataclass, field
-from typing import Iterator, NewType
+from typing import Any, Iterator, NewType
 
 from faker import Faker
 
@@ -45,10 +45,10 @@ class Store:
     def closes_at(self, day: Day) -> dt.time:
         return self.hours_of_operation.closes_at(day)
 
-    def to_dict(self) -> dict[str, str]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "id": str(self.id),
             "name": str(self.name),
             "opened_at": str(self.opened_day.date.isoformat()),
-            "tax_rate": str(self.tax_rate),
+            "tax_rate": float(self.tax_rate),
         }
